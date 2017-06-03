@@ -1,13 +1,23 @@
 const DOM = React.DOM;
 
+const SomeImage = (props) => (
+  DOM.img({
+    src: 'http://fotointeres.ru/wp-content/uploads/2016/09/0003a709_medium-720x479.jpg',
+    style: {
+      width: 200,
+      height: 150
+    }
+  })
+);
+
 class Draggable extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       position: {
-        left: 50,
-        top: 50,
+        left: 0,
+        top: 0,
       },
       innerOffset: {
         left: 0,
@@ -33,6 +43,8 @@ class Draggable extends React.Component {
 
   drag(e) {
     if(!this.state.isDragging) return;
+    e.preventDefault();
+    e.stopPropagation();
 
     this.setState({
       position: {
@@ -47,25 +59,21 @@ class Draggable extends React.Component {
       {
         style: {
           position: 'absolute',
-          border: '2px solid black',
-          width: 100,
-          height: 100,
           left: this.state.position.left,
           top: this.state.position.top,
-          textAlign: 'center',
           cursor: 'move'
         },
         onMouseDown:  this.dragStart.bind(this),
         onMouseMove: this.drag.bind(this),
         onMouseUp: this.dragEnd.bind(this),
       },
-      this.props.children
+      React.createElement(this.props.children)
     )
   }
 }
 
 ReactDOM.render(
-  React.createElement(Draggable, {}, 'Draggable'),
+  React.createElement(Draggable, {}, SomeImage),
   document.getElementById('app')
 );
 
